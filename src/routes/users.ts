@@ -2,7 +2,6 @@ import { Router } from "express";
 import { User } from "../models/User.js";
 import bcrypt from "bcrypt";
 import { ENV } from "../config/env.js";
-import { tracingChannel } from "diagnostics_channel";
 
 const router = Router();
 

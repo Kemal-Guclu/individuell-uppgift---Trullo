@@ -4,10 +4,14 @@ import express from "express";
 import { ENV } from "./config/env.js";
 import { connectDB } from "./db/connect.js";
 import healthRouter from "./routes/health.js";
+import userRouter from "./routes/users.js";
 
 function createApp() {
   const app = express();
   app.use(express.json());
+  app.use(userRouter);
+
+  // Registrera routes
   app.use(healthRouter);
   app.use((_req, res) => {
     res.status(404).json({ error: "Not found", message: "Route not found" });
