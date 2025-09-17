@@ -1,9 +1,16 @@
 import mongoose from "mongoose";
+import type { Request, Response } from "express";
 import { User } from "../models/User.js";
 
-export const deleteUser = async (req, res) => {
+export const deleteUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
+
+    if (!id) {
+      return res
+        .status(400)
+        .json({ error: "Bad Request", message: "ID saknas." });
+    }
 
     // 1. Validera ObjectId.
     if (!mongoose.Types.ObjectId.isValid(id)) {
