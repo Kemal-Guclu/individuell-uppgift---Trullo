@@ -4,7 +4,7 @@ import express from "express";
 import { ENV } from "./config/env.js";
 import { connectDB } from "./db/connect.js";
 import healthRouter from "./routes/health.js";
-import userRouter from "./routes/users.js";
+import userRouter from "./routes/userRoutes.js";
 
 function createApp() {
   const app = express();
