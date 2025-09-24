@@ -5,6 +5,7 @@ import { ENV } from "./config/env.js";
 import { connectDB } from "./db/connect.js";
 import healthRouter from "./routes/health.js";
 import userRouter from "./routes/userRoutes.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 
 function createApp() {
   const app = express();
@@ -17,6 +18,7 @@ function createApp() {
     res.status(404).json({ error: "Not found", message: "Route not found" });
   });
   return app;
+  app.use(errorHandler);
 }
 
 async function bootstrap() {
