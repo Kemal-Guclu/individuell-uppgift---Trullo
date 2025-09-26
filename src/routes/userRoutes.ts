@@ -7,19 +7,18 @@ import {
   uppdateUser,
 } from "../controllers/userController.js";
 import { validateUser } from "../middleware/validateUser.js";
-import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
 router.post("/users", validateUser, createUser);
 
-router.get("/users/:id", authMiddleware, validateUser, getUserById);
+router.get("/users/:id", validateUser, getUserById);
 
-router.get("/users", authMiddleware, getAllUsers);
+router.get("/users", getAllUsers);
 
-router.patch("/users/:id", authMiddleware, validateUser, uppdateUser);
+router.patch("/users/:id", validateUser, uppdateUser);
 
-router.delete("/users/:id", authMiddleware, validateUser, deleteUser);
+router.delete("/users/:id", validateUser, deleteUser);
 
 export default router;
 // export { router as usersRouter };
