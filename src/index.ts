@@ -6,6 +6,7 @@ import { connectDB } from "./db/connect.js";
 import healthRouter from "./routes/health.js";
 import userRouter from "./routes/userRoutes.js";
 import taskRouter from "./routes/taskRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 function createApp() {
@@ -13,6 +14,7 @@ function createApp() {
   app.use(express.json());
   app.use(userRouter);
   app.use(taskRouter);
+  app.use(authRoutes);
 
   // Registrera routes
   app.use(healthRouter);
