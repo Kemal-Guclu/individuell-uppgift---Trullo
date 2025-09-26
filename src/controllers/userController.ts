@@ -26,7 +26,7 @@ export const createUser = async (
     const passwordHash = await bcrypt.hash(password, ENV.BCRYPT_COST);
 
     // 4. Skapa/spara användaren
-    const user = new User({ name, email, password: passwordHash });
+    const user = new User({ name, email, passwordHash });
     await user.save();
 
     res.status(201).json({
