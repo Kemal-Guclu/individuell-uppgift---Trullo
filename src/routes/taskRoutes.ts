@@ -7,17 +7,18 @@ import {
   updateTask,
 } from "../controllers/taskController.js";
 import { validateTask } from "../middleware/validateTask.js";
+import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
-router.post("/tasks", validateTask, createTask);
+router.post("/tasks", authMiddleware, validateTask, createTask);
 
-router.get("/tasks/:id", validateTask, getTaskById);
+router.get("/tasks/:id", authMiddleware, validateTask, getTaskById);
 
-router.get("/tasks", getAllTasks);
+router.get("/tasks", authMiddleware, getAllTasks);
 
-router.patch("/tasks/:id", validateTask, updateTask);
+router.patch("/tasks/:id", authMiddleware, validateTask, updateTask);
 
-router.delete("/tasks/:id", validateTask, deleteTask);
+router.delete("/tasks/:id", authMiddleware, validateTask, deleteTask);
 
 export default router;
