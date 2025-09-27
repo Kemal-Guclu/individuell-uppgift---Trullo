@@ -174,3 +174,20 @@ export const deleteTask = async (
     //   .json({ error: "Internal Server Error", message: "Något gick fel." });
   }
 };
+
+export const getTasksForUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { userId } = req.params;
+    const tasks = await Task.find({ assignedTo: userId }).populate(
+      "assignedTo",
+      "name email"
+    );
+    res.json(tasks);
+  } catch (error) {
+    next(error);
+  }
+};

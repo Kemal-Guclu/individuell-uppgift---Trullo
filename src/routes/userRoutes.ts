@@ -11,15 +11,15 @@ import { authMiddleware } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
-router.post("/users", authMiddleware, validateUser, createUser);
+router.post("/users", validateUser, createUser);
 
-router.get("/users/:id", authMiddleware, validateUser, getUserById);
+router.get("/users/:id", authMiddleware, getUserById);
 
 router.get("/users", authMiddleware, getAllUsers);
 
 router.patch("/users/:id", authMiddleware, validateUser, uppdateUser);
 
-router.delete("/users/:id", authMiddleware, validateUser, deleteUser);
+router.delete("/users/:id", authMiddleware, deleteUser);
 
 export default router;
 // export { router as usersRouter };
