@@ -1,5 +1,6 @@
 //import mongoose from "mongoose";
 import type { Request, Response, NextFunction } from "express";
+import type { JwtPayload } from "jsonwebtoken";
 import { Task } from "../models/Task.js";
 import { User } from "../models/User.js";
 
@@ -187,6 +188,44 @@ export const getTasksForUser = async (
       "name email"
     );
     res.json(tasks);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const markTaskAsDone = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const user = req.user as JwtPayload;
+    //Hämta userId från JWT (satt i authMiddleware)
+    const userId = user.userId || user._id;
+    if (!userId) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized", message: "Ogiltig token." });
+    }
+    // Hämta och uppdatera tasken
+    const updatedTask = await Task.findOneAndUpdate(
+      { _id: id },
+      {
+        status: "done", // Endast om status är "done"
+        finishedAt: new Date(),
+        finishedBy: userId,
+      },
+      {
+        new: true,
+      }
+    );
+    if (!updatedTask) {
+      return res
+        .status(404)
+        .json({ error: "Not Found", message: "Task hittades inte." });
+    }
+    res.status(200).json(updatedTask);
   } catch (error) {
     next(error);
   }

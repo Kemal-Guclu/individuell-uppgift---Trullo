@@ -9,6 +9,7 @@ import {
 import { validateTask } from "../middleware/validateTask.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
 import { getTasksForUser } from "../controllers/taskController.js";
+import { markTaskAsDone } from "../controllers/taskController.js";
 
 const router = Router();
 
@@ -21,6 +22,8 @@ router.get("/users/:userId/tasks", authMiddleware, getTasksForUser);
 router.get("/tasks", authMiddleware, getAllTasks);
 
 router.patch("/tasks/:id", authMiddleware, validateTask, updateTask);
+
+router.patch("/tasks/:id/complete", authMiddleware, markTaskAsDone);
 
 router.delete("/tasks/:id", authMiddleware, deleteTask);
 
