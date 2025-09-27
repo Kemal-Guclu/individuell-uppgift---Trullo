@@ -79,7 +79,27 @@ export const getAllTasks = async (
   next: NextFunction
 ) => {
   try {
-    const tasks = await Task.find();
+    // Bygg filter baserat på query-parametrar
+    const filter: Record<string, unknown> = {};
+    if (_req.query.status) {
+      filter.status = _req.query.status;
+    }
+    if (_req.query.assignedTo) {
+      filter.assignedTo = _req.query.assignedTo;
+    }
+
+    // Bygg query
+    let query = Task.find(filter);
+
+    // Lägg till sortering om angivet
+    if (_req.query.sort) {
+      query = query.sort(_req.query.sort as string);
+    }
+
+    // Hämta tasks
+    const tasks = await query.exec();
+
+    // Returnera resultat
     res.status(200).json(tasks);
   } catch (error) {
     next(error);
