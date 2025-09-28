@@ -1,5 +1,8 @@
 import { Schema, model } from "mongoose";
 
+const allowedRoles = ["user", "admin"] as const;
+type Role = (typeof allowedRoles)[number];
+
 const userSchema = new Schema(
   {
     name: {
@@ -16,6 +19,7 @@ const userSchema = new Schema(
       match: [/.+@.+\..+/, "Ogiltig e-postadress"],
     },
     passwordHash: { type: String, required: true },
+    role: { type: String, enum: allowedRoles, default: "user" },
   },
   { timestamps: true }
 );

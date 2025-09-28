@@ -9,7 +9,7 @@
     // See also https://aka.ms/tsconfig/module
     "module": "NodeNext",
     "target": "es2020",
-    "types": [],
+    "types": ["node", "jest"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -34,7 +34,6 @@
 
     // Recommended Options
     "strict": true,
-    "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
@@ -43,5 +42,5 @@
     "esModuleInterop": true,
     "moduleResolution": "nodenext"
   },
-  "exclude": ["eslint.config.ts"]
+  "exclude": ["eslint.config.ts", "node_modules", "dist", "src/tests"]
 }
