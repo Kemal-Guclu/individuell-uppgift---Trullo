@@ -162,6 +162,37 @@ export const uppdateUser = async (
     //   .json({ error: "Internal Server Error", message: "Något gick fel." });
   }
 };
+export const updateUserRole = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    if (!["user", "admin"].includes(role)) {
+      return res.status(400).json({
+        error: "Ogiltig roll.",
+      });
+    }
+    const user = await User.findByIdAndUpdate(
+      id,
+      { role },
+      { new: true, runValidators: true }
+    ).select("-passwordHash");
+    if (!user) {
+      return res.status(404).json({
+        error: "Användare hittades inte.",
+      });
+    }
+
+    // 3. Returnera uppdaterad användare (utan lösenord)
+    res.json({ message: "Användarens roll har uppdaterats.", user });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const deleteUser = async (
   req: Request,

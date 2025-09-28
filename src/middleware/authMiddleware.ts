@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { ENV } from "../config/env.js";
+import { User } from "../models/User.js";
 
 // Extend Express Request interface to include 'user'
 import type { JwtPayload } from "jsonwebtoken";
@@ -11,7 +12,7 @@ declare module "express-serve-static-core" {
   }
 }
 
-export const authMiddleware = (
+export const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -39,8 +40,16 @@ export const authMiddleware = (
   try {
     // Typa decoded korrekt
     const decoded = jwt.verify(token, secret) as JwtPayload | string;
-    // lägg decoded user info i req.user
-    req.user = decoded;
+    const userId = typeof decoded === "string" ? undefined : decoded.userId;
+    if (!userId) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized", message: "Invalid token payload" });
+    }
+    const user = await User.findById(userId); // userId från token
+    if (!user) return res.status(401).json({ error: "Ogiltig användare" });
+
+    req.user = user; // Detta user-objekt har role!
     next();
   } catch (error) {
     // Typa error som unknown och gör en typkontroll
