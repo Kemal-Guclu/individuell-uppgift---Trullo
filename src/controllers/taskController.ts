@@ -215,7 +215,7 @@ export const markTaskAsDone = async (
 ) => {
   try {
     const { id } = req.params;
-    const user = req.user as JwtPayload;
+    const user = req.user as { _id: string; userId?: string | JwtPayload };
     //Hämta userId från JWT (satt i authMiddleware)
     const userId = user.userId || user._id;
     if (!userId) {
@@ -233,14 +233,19 @@ export const markTaskAsDone = async (
       },
       {
         new: true,
+        runValidators: true,
       }
-    );
+    ).populate("finishedBy", "name email");
+
     if (!updatedTask) {
       return res
         .status(404)
         .json({ error: "Not Found", message: "Task hittades inte." });
     }
-    res.status(200).json(updatedTask);
+    res.status(200).json({
+      message: "Task markerad som klar.",
+      task: updatedTask,
+    });
   } catch (error) {
     next(error);
   }
