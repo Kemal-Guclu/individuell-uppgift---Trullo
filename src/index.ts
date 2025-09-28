@@ -9,7 +9,7 @@ import taskRouter from "./routes/taskRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
-function createApp() {
+export function createApp() {
   const app = express();
   app.use(express.json());
   app.use(userRouter);

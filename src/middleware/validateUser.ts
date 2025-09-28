@@ -10,7 +10,7 @@ export function validateUser(req: Request, res: Response, next: NextFunction) {
   if (!isValidEmail(email)) {
     return res.status(400).json({ error: "Ogiltig e-post adress." });
   }
-  if (!isValidPassword(password)) {
+  if (!password || !isValidPassword(password)) {
     return res
       .status(400)
       .json({ error: "Lösenordet måste vara minst 8 tecken långt." });

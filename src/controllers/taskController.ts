@@ -19,11 +19,10 @@ export const createTask = async (
     if (assignedTo) {
       assignedUser = await User.findById(assignedTo);
       if (!assignedUser) {
-        throw new Error("Användaren som tasken ska tilldelas finns inte.");
-        // return res.status(404).json({
-        //   error: "Not Found",
-        //   message: "Användare hittades inte.",
-        // });
+        return res.status(404).json({
+          error: "Not Found",
+          message: "Användare hittades inte.",
+        });
       }
     }
     // 4. Skapa och spara task
@@ -57,10 +56,9 @@ export const getTaskById = async (
     // 2. Hämta task
     const task = await Task.findById(id);
     if (!task) {
-      throw new Error("Task hittades inte.");
-      // return res
-      //   .status(404)
-      //   .json({ error: "Not Found", message: "Task hittades inte." });
+      return res
+        .status(404)
+        .json({ error: "Not Found", message: "Task hittades inte." });
     }
     // 3. Returnera task
     res.status(200).json(task);
@@ -145,21 +143,19 @@ export const updateTask = async (
     if (assignedTo !== undefined) update.assignedTo = assignedTo;
 
     if (Object.keys(update).length === 0) {
-      throw new Error("Inga uppgifter att uppdatera.");
-      // return res.status(400).json({
-      //   error: "Bad Request",
-      //   message: "Inga uppgifter att uppdatera.",
-      // });
+      return res.status(400).json({
+        error: "Bad Request",
+        message: "Inga uppgifter att uppdatera.",
+      });
     }
     const updatedTask = await Task.findByIdAndUpdate(id, update, {
       new: true,
       runValidators: true,
     });
     if (!updatedTask) {
-      throw new Error("Task hittades inte.");
-      // return res
-      //   .status(404)
-      //   .json({ error: "Not Found", message: "Task hittades inte." });
+      return res
+        .status(404)
+        .json({ error: "Not Found", message: "Task hittades inte." });
     }
     res.status(200).json(updatedTask);
   } catch (error) {
@@ -181,10 +177,9 @@ export const deleteTask = async (
 
     const deletedTask = await Task.findByIdAndDelete(id);
     if (!deletedTask) {
-      throw new Error("Task hittades inte.");
-      // return res
-      //   .status(404)
-      //   .json({ error: "Not Found", message: "Task hittades inte." });
+      return res
+        .status(404)
+        .json({ error: "Not Found", message: "Task hittades inte." });
     }
     res.status(204).send();
   } catch (error) {

@@ -24,8 +24,7 @@ export const login = async (
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({
-        error: "Unauthorized",
-        message: "Felaktig e-post eller lösenord",
+        error: "Felaktigt lösenord eller e-post",
       });
     }
 
@@ -33,8 +32,7 @@ export const login = async (
     const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) {
       return res.status(401).json({
-        error: "Unauthorized",
-        message: "Felaktig e-post eller lösenord",
+        error: "Felaktigt lösenord eller e-post",
       });
     }
 

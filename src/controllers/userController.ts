@@ -15,11 +15,9 @@ export const createUser = async (
     // 2. Kontrollera unik e-post
     const existing = await User.findOne({ email });
     if (existing) {
-      throw new Error("E-postadressen är redan registrerad.");
-      // return res.status(409).json({
-      //   error: "Conflict",
-      //   message: "E-postadressen är redan registrerad.",
-      // });
+      return res.status(409).json({
+        error: "E-postadressen är redan registrerad.",
+      });
     }
 
     // 3. Hasha lösenordet
@@ -60,10 +58,9 @@ export const getUserById = async (
     // 2. Hämta användaren utan lösenord
     const user = await User.findById(id).select("-passwordHash");
     if (!user) {
-      return next(new Error("Användare hittades inte."));
-      // return res
-      //   .status(404)
-      //   .json({ error: "Not Found", message: "Användare hittades inte." });
+      return res
+        .status(404)
+        .json({ error: "Not Found", message: "Användare hittades inte." });
     }
     // 3. Returnera användaren utan lösenord
     res.status(200).json(user);
@@ -105,7 +102,9 @@ export const uppdateUser = async (
       // Kontrollera unik e-post
       const existing = await User.findOne({ email, _id: { $ne: id } });
       if (existing) {
-        throw new Error("E-postadressen är redan registrerad.");
+        return res.status(409).json({
+          error: "E-postadressen är redan registrerad.",
+        });
       }
       uppdate.email = email.toLowerCase();
     }
@@ -137,11 +136,10 @@ export const uppdateUser = async (
 
     // 5. Om inget att uppdatera
     if (Object.keys(uppdate).length === 0) {
-      throw new Error("Inga uppgifter att uppdatera.");
-      // return res.status(400).json({
-      //   error: "Bad Request",
-      //   message: "Inga uppgifter att uppdatera.",
-      // });
+      return res.status(400).json({
+        error: "Bad Request",
+        message: "Inga uppgifter att uppdatera.",
+      });
     }
 
     // 6. Uppdatera användaren
@@ -150,10 +148,9 @@ export const uppdateUser = async (
       runValidators: true,
     }).select("-passwordHash");
     if (!updatedUser) {
-      throw new Error("Användare hittades inte.");
-      // return res
-      //   .status(404)
-      //   .json({ error: "Not Found", message: "Användare hittades inte." });
+      return res
+        .status(404)
+        .json({ error: "Not Found", message: "Användare hittades inte." });
     }
     // 7. Returnera uppdaterad användare (utan lösenord)
     res.json(updatedUser);
@@ -176,10 +173,9 @@ export const deleteUser = async (
     // 2. Försök att ta bort användaren.
     const deleted = await User.findByIdAndDelete(id);
     if (!deleted) {
-      return next(new Error("Användare hittades inte."));
-      // return res
-      //   .status(404)
-      //   .json({ error: "Not Found", message: "Användare hittades inte." });
+      return res
+        .status(404)
+        .json({ error: "Not Found", message: "Användare hittades inte." });
     }
     // 3. Bekräfta borttagning.
     res.status(204).send();

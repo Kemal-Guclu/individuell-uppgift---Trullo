@@ -13,6 +13,7 @@ const userSchema = new Schema(
       unique: true,
       lowercase: true,
       trim: true,
+      match: [/.+@.+\..+/, "Ogiltig e-postadress"],
     },
     passwordHash: { type: String, required: true },
   },
