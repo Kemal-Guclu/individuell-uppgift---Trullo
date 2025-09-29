@@ -291,6 +291,4 @@ POST /reset-password
   "token": "reset-token-from-email",
   "password": "newStrongPassword123"
 }
-
----
 ```
