@@ -20,6 +20,8 @@ const userSchema = new Schema(
     },
     passwordHash: { type: String, required: true },
     role: { type: String, enum: allowedRoles, default: "user" },
+    resetPasswordToken: { type: String, default: null },
+    resetPasswordExpires: { type: Date, default: null },
   },
   { timestamps: true }
 );
